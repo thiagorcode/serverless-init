@@ -34,6 +34,12 @@ const serverlessConfiguration: AWS = {
       }
     ]
   },
+  package: {
+    // Informa que gere o build de todas as functions juntas.
+    individually: false,
+    // Informa para o serverless que inclua o conteúdo da pasta templates
+    include: ["./src/templates/**"]
+  },
   // import the function via paths
   functions: { 
     generateCertification: {
@@ -48,8 +54,19 @@ const serverlessConfiguration: AWS = {
         }
       ]
     },
+    verifyCertification: {
+      handler: "src/functions/verifyCertificate.handler",
+      events: [
+        {
+          http: {
+            path: 'verify-certificate/{id}',
+            method: 'get',
+            cors: true
+          }
+        }
+      ]
+    },
   },
-  package: { individually: true },
   custom: {
     esbuild: {
       bundle: true,
